@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Apoio técnico a advogados: análise de peças processuais e minuta da resposta.">
+<title>Análise de Peças e Minutas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    --paper:      #F5F2EC;
+    --surface:    #FFFFFF;
+    --surface-2:  #EFEBE3;
+    --ink:        #1A1512;
+    --ink-soft:   #4C4540;
+    --ink-mute:   #7A716A;
+    --rule:       #DCD5C9;
+    --rule-soft:  #E7E1D6;
+    --accent:     #6B2233;
+    --accent-dim: #8C3B4B;
+    --mark:       #9A6B08;
+    --mark-bg:    #F5E7C4;
+    --shadow:     0 1px 2px rgba(26,21,18,.05), 0 12px 28px -18px rgba(26,21,18,.35);
+
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+    --measure: 63ch;
+    --pad: clamp(1.25rem, 5vw, 3rem);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:      #141110;
+      --surface:    #1C1817;
+      --surface-2:  #241F1D;
+      --ink:        #EDE7DF;
+      --ink-soft:   #C2B8AE;
+      --ink-mute:   #8E837B;
+      --rule:       #332D2A;
+      --rule-soft:  #2A2523;
+      --accent:     #D98894;
+      --accent-dim: #C0707E;
+      --mark:       #E5B75C;
+      --mark-bg:    #3A2F16;
+      --shadow:     0 1px 2px rgba(0,0,0,.4), 0 14px 30px -18px rgba(0,0,0,.8);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:      #141110;
+    --surface:    #1C1817;
+    --surface-2:  #241F1D;
+    --ink:        #EDE7DF;
+    --ink-soft:   #C2B8AE;
+    --ink-mute:   #8E837B;
+    --rule:       #332D2A;
+    --rule-soft:  #2A2523;
+    --accent:     #D98894;
+    --accent-dim: #C0707E;
+    --mark:       #E5B75C;
+    --mark-bg:    #3A2F16;
+    --shadow:     0 1px 2px rgba(0,0,0,.4), 0 14px 30px -18px rgba(0,0,0,.8);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 var(--pad); }
+  .col  { max-width: var(--measure); }
+
+  section { padding-block: clamp(3rem, 7vw, 5.5rem); }
+  section + section { border-top: 1px solid var(--rule-soft); }
+
+  h1, h2, h3 { font-family: var(--serif); font-weight: 600; text-wrap: balance; margin: 0; letter-spacing: -.01em; }
+  h1 { font-size: clamp(2.15rem, 5.6vw, 3.5rem); line-height: 1.08; }
+  h2 { font-size: clamp(1.5rem, 3.2vw, 2.05rem); line-height: 1.18; }
+  h3 { font-size: 1.16rem; line-height: 1.3; }
+  p  { margin: 0; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: .715rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin: 0 0 1.1rem;
+    display: flex; align-items: center; gap: .7rem;
+  }
+  .eyebrow::after { content: ""; flex: 1; height: 1px; background: var(--rule); max-width: 5rem; }
+
+  .stack { display: flex; flex-direction: column; gap: 1.15rem; }
+  .stack-lg { display: flex; flex-direction: column; gap: 2.4rem; }
+
+  .lede { font-family: var(--serif); font-size: clamp(1.16rem, 2.3vw, 1.42rem); line-height: 1.5; color: var(--ink-soft); }
+
+  /* ---------- hero ---------- */
+  .hero { padding-top: clamp(2.75rem, 6vw, 4.5rem); padding-bottom: clamp(2.5rem, 6vw, 4rem); }
+  .hero .kicker {
+    font-family: var(--mono); font-size: .72rem; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 1.4rem;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero-grid { display: grid; gap: clamp(2rem, 4vw, 3.25rem); grid-template-columns: 1fr; align-items: start; }
+  @media (min-width: 880px) { .hero-grid { grid-template-columns: 1.35fr .8fr; } }
+
+  .facts { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--rule); }
+  .fact { display: flex; flex-direction: column; gap: .15rem; padding: .85rem 0; border-bottom: 1px solid var(--rule-soft); }
+  .fact dt { font-family: var(--mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-mute); }
+  .fact dd { margin: 0; font-size: .95rem; color: var(--ink-soft); }
+  .fact dd strong { color: var(--ink); font-weight: 600; }
+
+  .cta-row { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2rem; }
+  .btn {
+    display: inline-flex; align-items: center; gap: .5rem;
+    font-family: var(--sans); font-size: .93rem; font-weight: 500;
+    padding: .72rem 1.25rem; border-radius: 2px; text-decoration: none;
+    border: 1px solid var(--accent); transition: background .15s, color .15s;
+  }
+  .btn-solid { background: var(--accent); color: var(--paper); }
+  .btn-solid:hover { background: var(--accent-dim); border-color: var(--accent-dim); }
+  .btn-ghost { color: var(--accent); background: transparent; }
+  .btn-ghost:hover { background: var(--surface-2); }
+  a:focus-visible, .btn:focus-visible { outline: 2px solid var(--mark); outline-offset: 3px; }
+
+  /* ---------- problem ---------- */
+  .problem { display: grid; gap: 1.6rem; grid-template-columns: 1fr; margin-top: 2rem; }
+  @media (min-width: 780px) { .problem { grid-template-columns: repeat(3, 1fr); gap: 2rem; } }
+  .problem div { border-top: 2px solid var(--rule); padding-top: .95rem; }
+  .problem h3 { font-family: var(--sans); font-size: .93rem; font-weight: 600; letter-spacing: .01em; margin-bottom: .4rem; }
+  .problem p { font-size: .95rem; color: var(--ink-soft); }
+
+  /* ---------- deliverables ---------- */
+  .docs { display: grid; gap: 1.5rem; grid-template-columns: 1fr; margin-top: 2.4rem; }
+  @media (min-width: 800px) { .docs { grid-template-columns: 1fr 1fr; gap: 1.75rem; } }
+  .doc {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--accent);
+    box-shadow: var(--shadow);
+    padding: 1.65rem 1.65rem 1.5rem;
+    display: flex; flex-direction: column; gap: .9rem;
+  }
+  .doc .tag { font-family: var(--mono); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-mute); }
+  .doc ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: .55rem; }
+  .doc li { font-size: .93rem; color: var(--ink-soft); padding-left: 1.05rem; position: relative; }
+  .doc li::before { content: "—"; position: absolute; left: 0; color: var(--accent); }
+
+  /* ---------- steps ---------- */
+  ol.steps { margin: 2.2rem 0 0; padding: 0; list-style: none; counter-reset: s; display: flex; flex-direction: column; }
+  ol.steps li {
+    counter-increment: s; display: grid; grid-template-columns: 3.1rem 1fr; gap: .35rem 1.1rem;
+    padding: 1.15rem 0; border-bottom: 1px solid var(--rule-soft); align-items: baseline;
+  }
+  ol.steps li:first-child { border-top: 1px solid var(--rule); }
+  ol.steps li::before {
+    content: counter(s, decimal-leading-zero);
+    font-family: var(--mono); font-size: .82rem; color: var(--accent); letter-spacing: .06em;
+    font-variant-numeric: tabular-nums;
+  }
+  ol.steps h3 { font-family: var(--sans); font-size: 1rem; font-weight: 600; }
+  ol.steps p { grid-column: 2; font-size: .95rem; color: var(--ink-soft); }
+
+  /* ---------- method ---------- */
+  .method-band { background: var(--surface-2); }
+  mark.verificar {
+    background: var(--mark-bg); color: var(--mark);
+    font-family: var(--mono); font-size: .82em; padding: .1em .4em;
+    border-radius: 2px; white-space: nowrap;
+  }
+  .method-list { margin: 2rem 0 0; padding: 0; list-style: none; display: grid; gap: 1.35rem; grid-template-columns: 1fr; }
+  @media (min-width: 780px) { .method-list { grid-template-columns: 1fr 1fr; gap: 1.6rem 2.4rem; } }
+  .method-list h3 { font-family: var(--sans); font-size: .95rem; font-weight: 600; margin-bottom: .35rem; }
+  .method-list p { font-size: .93rem; color: var(--ink-soft); }
+
+  /* ---------- scope ---------- */
+  .scope { display: grid; gap: 2rem; grid-template-columns: 1fr; margin-top: 2.2rem; }
+  @media (min-width: 780px) { .scope { grid-template-columns: 1fr 1fr; gap: 3rem; } }
+  .scope h3 { font-family: var(--mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-mute); font-weight: 500; margin-bottom: .9rem; }
+  .scope ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: .6rem; }
+  .scope li { font-size: .95rem; color: var(--ink-soft); padding-left: 1.35rem; position: relative; }
+  .scope li::before { position: absolute; left: 0; font-family: var(--mono); font-size: .85em; }
+  .scope .yes li::before { content: "+"; color: var(--accent); }
+  .scope .no li::before { content: "\2013"; color: var(--ink-mute); }
+
+  /* ---------- pieces ---------- */
+  .pieces { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.8rem; }
+  .pieces span {
+    font-family: var(--mono); font-size: .78rem; color: var(--ink-soft);
+    border: 1px solid var(--rule); background: var(--surface);
+    padding: .38rem .7rem; border-radius: 2px;
+  }
+
+  /* ---------- contact ---------- */
+  .contact-band { background: var(--surface); border-top: 1px solid var(--rule); }
+  .contact-grid { display: grid; gap: 2rem; grid-template-columns: 1fr; align-items: start; }
+  @media (min-width: 840px) { .contact-grid { grid-template-columns: 1.2fr .8fr; gap: 3.5rem; } }
+  .contact-lines { display: flex; flex-direction: column; gap: .1rem; border-top: 1px solid var(--rule); }
+  .contact-lines a, .contact-lines span {
+    display: flex; justify-content: space-between; gap: 1rem; align-items: baseline;
+    padding: .8rem 0; border-bottom: 1px solid var(--rule-soft);
+    text-decoration: none; color: var(--ink); font-size: .95rem;
+  }
+  .contact-lines a:hover { color: var(--accent); }
+  .contact-lines .lbl { font-family: var(--mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-mute); }
+
+  footer { padding: 2.4rem 0 3.2rem; }
+  footer p { font-size: .82rem; color: var(--ink-mute); max-width: 70ch; }
+  footer p + p { margin-top: .7rem; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+</head>
+<body>
+<main>
+  <div class="wrap">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <p class="kicker">Apoio técnico a advogados</p>
+          <h1>Chegou a peça do outro lado. <em>O prazo corre</em> — e há outros oito processos.</h1>
+          <p class="lede" style="margin-top:1.4rem">Contestação, recurso, impugnação, manifestação sobre laudo, decisão administrativa: eu leio a peça, confronto com o que já está nos autos, confiro cada dispositivo e cada precedente em fonte oficial e devolvo dois documentos — o relatório da análise e a minuta da resposta. Você revisa, decide e assina.</p>
+          <div class="cta-row">
+            <a class="btn btn-solid" href="#contato">Solicitar a amostra</a>
+            <a class="btn btn-ghost" href="#como">Ver como funciona</a>
+          </div>
+        </div>
+        <dl class="facts">
+          <div class="fact"><dt>Objeto</dt><dd>Qualquer peça dos autos, e a sua também</dd></div>
+          <div class="fact"><dt>Prazo de entrega</dt><dd><strong>48 horas úteis</strong> a contar do envio dos autos</dd></div>
+          <div class="fact"><dt>Entregáveis</dt><dd>Relatório de análise <strong>+</strong> minuta da resposta</dd></div>
+          <div class="fact"><dt>Fontes</dt><dd>Conferidas uma a uma; o não confirmado é declarado</dd></div>
+          <div class="fact"><dt>Assinatura</dt><dd>Sempre do <strong>advogado responsável</strong></dd></div>
+          <div class="fact"><dt>Contratante</dt><dd>Exclusivamente advogados inscritos na OAB</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- PROBLEMA -->
+    <section>
+      <p class="eyebrow">O problema</p>
+      <div class="col">
+        <h2>A resposta costuma ser escrita no penúltimo dia</h2>
+        <p style="margin-top:1rem;color:var(--ink-soft)">Não por descuido, mas por aritmética. A peça da parte contrária tem trinta páginas, o que já está nos autos tem outras tantas, e o trabalho que realmente decide o resultado — cruzar uma coisa com a outra — é o primeiro a ser sacrificado quando três prazos vencem na mesma semana.</p>
+      </div>
+      <div class="problem">
+        <div>
+          <h3>O que passa despercebido</h3>
+          <p>A alegação que o outro lado deixou sem enfrentar, ou o fato que não impugnou. É o argumento mais forte da resposta, e só aparece na leitura cruzada.</p>
+        </div>
+        <div>
+          <h3>O que consome a hora cara</h3>
+          <p>Conferir se a súmula ainda é aquela, se o tema foi revisto, se o acórdão citado pelo outro lado diz mesmo o que ele afirma.</p>
+        </div>
+        <div>
+          <h3>O que fica para depois</h3>
+          <p>A providência paralela: o pedido que já é exigível desde logo, a diligência com o cliente, o documento que falta juntar, a prova que precisa ser requerida agora.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DUAS FRENTES -->
+    <section>
+      <p class="eyebrow">Duas frentes</p>
+      <div class="col">
+        <h2>A peça que chegou, e a que você ainda vai protocolar</h2>
+        <p style="margin-top:1rem;color:var(--ink-soft)">A leitura é a mesma nos dois sentidos: confrontar um texto com o que os autos já dizem. O que muda é de que lado está o texto.</p>
+      </div>
+      <div class="docs">
+        <article class="doc">
+          <p class="tag">Frente 1</p>
+          <h3>A peça da parte contrária</h3>
+          <p style="font-size:.93rem;color:var(--ink-soft)">Contestação, recurso, contrarrazões, impugnação ao cumprimento de sentença, manifestação sobre laudo pericial, decisão administrativa do INSS ou de operadora de saúde. Você recebe o relatório do que foi alegado, do que ficou sem impugnação e de onde está o risco — e a minuta da resposta cabível.</p>
+        </article>
+        <article class="doc">
+          <p class="tag">Frente 2</p>
+          <h3>A peça do seu escritório</h3>
+          <p style="font-size:.93rem;color:var(--ink-soft)">Uma segunda leitura antes do protocolo. Confronto a sua peça com os autos e devolvo a auditoria item a item: alegação da parte contrária deixada sem resposta, fundamento não enfrentado, prova que precisaria ser requerida, risco de preclusão. Não reescrevo o seu texto — aponto o que faltou.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ENTREGÁVEIS -->
+    <section>
+      <p class="eyebrow">O que você recebe</p>
+      <div class="col">
+        <h2>Dois documentos que funcionam juntos</h2>
+        <p style="margin-top:1rem;color:var(--ink-soft)">O relatório é o seu documento de trabalho — ele diz o que há nos autos e o que precisa ser decidido. A minuta é o texto da resposta, redigido a partir desse diagnóstico. Um sem o outro não serve para muita coisa. O exemplo dos itens abaixo é de matéria recursal, que é onde a estrutura fica mais visível; em contestação, impugnação ou decisão administrativa muda o vocabulário, não o método.</p>
+      </div>
+      <div class="docs">
+        <article class="doc">
+          <p class="tag">Parte I</p>
+          <h3>Relatório de análise recursal</h3>
+          <ul>
+            <li>Quadro de admissibilidade: tempestividade, preparo, dialeticidade, interesse recursal, inovação, representação</li>
+            <li>Mapa de impugnação: fundamento a fundamento, o que foi atacado, como, e com que força</li>
+            <li>Fundamentos não impugnados e capítulos com trânsito em julgado parcial</li>
+            <li>Confronto de precedentes, com o <em>distinguishing</em> de cada julgado do outro lado</li>
+            <li>Riscos, com estimativa de impacto econômico, e providências urgentes</li>
+          </ul>
+        </article>
+        <article class="doc">
+          <p class="tag">Parte II</p>
+          <h3>Minuta da resposta</h3>
+          <ul>
+            <li>Redigida em duplo eixo: não conhecimento e, sucessivamente, desprovimento</li>
+            <li>Legislação e jurisprudência integradas ao texto, e não empilhadas entre parênteses</li>
+            <li>Reiteração dos fundamentos autônomos ainda não apreciados, para o caso de causa madura</li>
+            <li>Requerimentos fechados, incluindo honorários recursais e prioridade de tramitação</li>
+            <li>Entregue como material de trabalho, para a sua revisão, ajuste e assinatura</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- COMO FUNCIONA -->
+    <section id="como">
+      <p class="eyebrow">Como funciona</p>
+      <div class="col"><h2>Quatro passos, e o último é sempre seu</h2></div>
+      <ol class="steps">
+        <li>
+          <h3>Você envia os autos</h3>
+          <p>A peça a ser analisada, o que já está nos autos sobre o mesmo ponto e a data da intimação. Se for auditoria da sua própria peça, mande também a peça a que ela responde. Se houver ponto que você já decidiu não discutir, me diga qual — a estratégia é sua.</p>
+        </li>
+        <li>
+          <h3>Confirmo escopo, prazo e valor</h3>
+          <p>Antes de começar, por escrito. Se a leitura inicial revelar algo que muda a estratégia, aviso antes de redigir uma linha.</p>
+        </li>
+        <li>
+          <h3>Análise e redação</h3>
+          <p>Leitura cruzada da peça com os autos, pesquisa em fontes oficiais e redação. Entrega em 48 horas úteis, ou no prazo que combinarmos quando os autos forem volumosos.</p>
+        </li>
+        <li>
+          <h3>Você revisa, decide e assina</h3>
+          <p>Recebe os dois documentos e uma mensagem de três linhas com o risco principal, os pontos que dependem de conferência e a providência urgente, se houver. Ajustes de estratégia são refeitos.</p>
+        </li>
+      </ol>
+    </section>
+  </div>
+
+  <!-- MÉTODO -->
+  <div class="method-band">
+    <div class="wrap">
+      <section>
+        <p class="eyebrow">O método</p>
+        <div class="col">
+          <h2>O que não foi confirmado vem escrito no relatório</h2>
+          <p style="margin-top:1rem;color:var(--ink-soft)">Toda peça de apoio enfrenta a mesma desconfiança legítima: e se a citação não existir? A resposta aqui não é uma promessa, é um procedimento. Cada dispositivo e cada precedente é conferido na fonte oficial; o que não se confirma não entra na peça — fica registrado no relatório, nominalmente, como não confirmado. E tudo que depende de consulta ao sistema, ao cliente ou a documento ainda não juntado aparece marcado assim: <mark class="verificar">[VERIFICAR]</mark>.</p>
+        </div>
+        <div class="method-list">
+          <div>
+            <h3>Nenhum dado é presumido</h3>
+            <p>Data de intimação, guia de custas, providência do cliente: se não está nos autos que recebi, vira marcação, não vira afirmação.</p>
+          </div>
+          <div>
+            <h3>O precedente do outro lado é lido</h3>
+            <p>Cada julgado invocado pela parte contrária recebe uma distinção própria — ou o registro de que não foi possível conferi-lo em base oficial.</p>
+          </div>
+          <div>
+            <h3>Inteligência artificial com supervisão</h3>
+            <p>Ferramentas de IA são usadas na leitura, na organização e na pesquisa. A conferência das fontes e a redação final são humanas, e o relatório declara o que foi verificado.</p>
+          </div>
+          <div>
+            <h3>Sigilo, e nada de vitrine</h3>
+            <p>Os autos recebidos são tratados sob sigilo profissional, com termo de confidencialidade quando você quiser. Nenhum caso atendido é divulgado.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <!-- ESCOPO -->
+    <section>
+      <p class="eyebrow">Escopo</p>
+      <div class="col">
+        <h2>Onde começa e onde termina</h2>
+        <p style="margin-top:1rem;color:var(--ink-soft)">A distinção abaixo não é formalidade. É ela que mantém a atividade regular e a sua responsabilidade profissional intacta.</p>
+      </div>
+      <div class="scope">
+        <div class="yes">
+          <h3>O que está incluído</h3>
+          <ul>
+            <li>Leitura integral dos autos enviados</li>
+            <li>Pesquisa de legislação, súmulas, temas e enunciados em fonte oficial</li>
+            <li>Relatório de análise e minuta da resposta, ou auditoria de peça já redigida</li>
+            <li>Ajustes decorrentes da sua revisão</li>
+            <li>Termo de confidencialidade, quando solicitado</li>
+          </ul>
+        </div>
+        <div class="no">
+          <h3>O que não está</h3>
+          <ul>
+            <li>Contato com a parte ou com o cliente do escritório</li>
+            <li>Atendimento, consulta ou orientação jurídica a terceiros</li>
+            <li>Protocolo de peças e acompanhamento processual</li>
+            <li>Assinatura de qualquer documento levado aos autos</li>
+            <li>Promessa de resultado, em qualquer hipótese</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PEÇAS -->
+    <section>
+      <p class="eyebrow">Peças atendidas</p>
+      <div class="col">
+        <h2>Cível, consumidor e previdenciário</h2>
+        <p style="margin-top:1rem;color:var(--ink-soft)">A análise recursal é onde o método aparece com mais nitidez, mas ele não se prende a ela: diagnóstico primeiro, texto depois, seja qual for a peça.</p>
+      </div>
+      <div class="pieces">
+        <span>Réplica à contestação</span>
+        <span>Contrarrazões a recurso inominado</span>
+        <span>Contrarrazões de apelação</span>
+        <span>Recurso inominado e apelação</span>
+        <span>Agravo de instrumento</span>
+        <span>Embargos de declaração</span>
+        <span>Impugnação ao cumprimento de sentença</span>
+        <span>Manifestação sobre laudo pericial</span>
+        <span>Memoriais</span>
+        <span>Cumprimento de sentença</span>
+        <span>Recurso ao CRPS</span>
+        <span>Parecer previdenciário</span>
+        <span>Auditoria de peça antes do protocolo</span>
+      </div>
+    </section>
+  </div>
+
+  <!-- CONTATO -->
+  <div class="contact-band" id="contato">
+    <div class="wrap">
+      <section>
+        <div class="contact-grid">
+          <div>
+            <p class="eyebrow">Próximo passo</p>
+            <h2>Peça a amostra antes de contratar qualquer coisa</h2>
+            <p style="margin-top:1rem;color:var(--ink-soft);max-width:56ch">É um trabalho real — relatório e minuta, num arquivo só —, com todos os dados das partes suprimidos. Leva dez minutos de leitura e mostra o padrão melhor do que qualquer descrição. Envio individualmente, a advogado que a solicite.</p>
+            <p style="margin-top:1rem;color:var(--ink-soft);max-width:56ch">Se preferir avaliar na prática, começamos por um trabalho só — a análise de uma peça que chegou, ou a revisão de uma que você vai protocolar — e você decide depois se continua.</p>
+          </div>
+          <div class="contact-lines">
+            <a href="https://wa.me/5584999700170"><span class="lbl">WhatsApp</span><span>(84) 99970-0170</span></a>
+            <a href="mailto:erimar_santos@hotmail.com"><span class="lbl">E-mail</span><span>erimar_santos@hotmail.com</span></a>
+            <span><span class="lbl">Atendimento</span><span>Todo o país, à distância</span></span>
+            <span><span class="lbl">Valores</span><span>Informados em conversa reservada</span></span>
+          </div>
+        </div>
+      </section>
+      <footer>
+        <p>Serviço de apoio técnico prestado exclusivamente a advogados inscritos na Ordem dos Advogados do Brasil. Não constitui prestação de serviços jurídicos ao público, não há captação de clientela e não há contato com a parte. A revisão, a decisão estratégica, a assinatura e o protocolo de qualquer peça permanecem, integralmente, com o advogado responsável pela causa, na forma da Lei nº 8.906/1994.</p>
+        <p>Esta página tem finalidade informativa e observa os limites do Provimento nº 205/2021 do Conselho Federal da OAB: não veicula promessa de resultados, não expõe casos concretos e não divulga valores de honorários.</p>
+        <p>Erimar Santos · Caicó/RN · <a href="https://wa.me/5584999700170" style="color:inherit">WhatsApp (84) 99970-0170</a> · <a href="mailto:erimar_santos@hotmail.com" style="color:inherit">erimar_santos@hotmail.com</a></p>
+      </footer>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>
